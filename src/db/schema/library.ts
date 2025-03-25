@@ -12,7 +12,6 @@ export const libraryTable = pgTable("library", {
     category: text("category").notNull(),
     visibility: text("visbility").notNull(),
     instruction: text("instruction"),
-    // gptId: text("gptId").notNull().references(() => modelGptTable.id),
     modelAI:text("modelAI"),
     modelAIAccurarcy: doublePrecision("modelAIAccurarcy"),
     youtbeChannel:text("youtube"),

@@ -1,15 +1,29 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.addNewLibraryController = exports.updateLibraryController = exports.getCharacterController = exports.getAgentController = exports.getSpaceController = exports.getDiscoverController = exports.getUserController = exports.errorHandler = void 0;
-const index_1 = require("../service/index");
-const errorHandler = async (err, req, res, next) => {
-    console.error(err);
-    res.status(err.statusCode || 500).json({
-        success: false,
-        message: err.message || "Internal Server Error",
-    });
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.errorHandler = errorHandler;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.addNewLibraryController = exports.updateLibraryController = exports.getCharacterController = exports.getAgentController = exports.getSpaceController = exports.getDiscoverController = exports.getUserController = void 0;
+const index_1 = require("../service/index");
+const joi_1 = __importDefault(require("joi"));
+const libraryType_1 = require("../../../types/libraryType");
+const LibraryVaildation = joi_1.default.object({
+    userId: joi_1.default.string().required(),
+    type: joi_1.default.string().required().valid(libraryType_1.TYPE_SPACES, libraryType_1.TYPE_AGENTS, libraryType_1.TYPE_CHARACTERS),
+    image: joi_1.default.string().required(),
+    title: joi_1.default.string().required(),
+    describtion: joi_1.default.string().required(),
+    category: joi_1.default.string().required().valid(libraryType_1.CATEGORY_EDUCATION, libraryType_1.CATEGORY_BUSINESS),
+    visibility: joi_1.default.string().required().valid(libraryType_1.VISIBLITY_PRIVATE, libraryType_1.VISIBLITY_PUBLIC),
+    instruction: joi_1.default.string(),
+    modelAI: joi_1.default.string().valid(libraryType_1.GPT_2, libraryType_1.GPT_3_5, libraryType_1.GPT_4),
+    modelAIAccuracy: joi_1.default.number().min(0.0).max(1.0),
+    youtubeChannelLink: joi_1.default.string(),
+    youtubeVideoLink: joi_1.default.string(),
+    websiteURl: joi_1.default.string(),
+    webpageLink: joi_1.default.string(),
+    document: joi_1.default.string()
+});
 // GET ALL and GET user by ID (combined)
 const getUserController = async (req, res, next) => {
     try {
@@ -83,8 +97,15 @@ exports.getCharacterController = getCharacterController;
 const updateLibraryController = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const data = req.body;
-        await (0, index_1.updateLibrary)(id, data);
+        const { error, value } = LibraryVaildation.validate(req.body);
+        if (error) {
+            const error = new Error();
+            error.statusCode = 400;
+            error.name = 'Bad Request.';
+            error.message = JSON.stringify(error);
+            throw error;
+        }
+        await (0, index_1.updateLibrary)(id, value);
         res.status(200).json({ success: true, message: "Library Updated Successfully successfully" });
     }
     catch (error) {
@@ -95,8 +116,14 @@ exports.updateLibraryController = updateLibraryController;
 // ADD new Librqary data in the db
 const addNewLibraryController = async (req, res, next) => {
     try {
-        const newLibrary = req.body;
-        const dbResult = await (0, index_1.addLibrary)(newLibrary);
+        const { error, value } = LibraryVaildation.validate(req.body);
+        if (error) {
+            const customError = new Error();
+            customError.statusCode = 400;
+            customError.message = error.message;
+            throw customError;
+        }
+        await (0, index_1.addLibrary)(value);
         res.status(201).json({ success: true, message: "Library added successfully" });
     }
     catch (error) {

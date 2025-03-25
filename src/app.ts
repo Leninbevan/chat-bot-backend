@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express"
 import cors from "cors"
 import router from "./api/v1/routes"
-import { errorHandler } from "./api/v1/controllers";
+import { CustomError } from "./types/error";
 
 const app = express()
 
@@ -21,11 +21,15 @@ app.get("/", (_: Request, res: Response) => {
     res.send("Server is working");
 });
 
-console.log("app------------------>")
-
 // API versioning
 app.use("/api/v1", router)
 
-app.use(errorHandler);
+app.use((err: CustomError.Error, req: Request, res: Response, next: Function) => {
+    console.error(err);
+    res.status(err.statusCode || 500).json({
+        success: false,
+        message: err.message || "Internal Server Error",
+    });
+});
 
 export default app;

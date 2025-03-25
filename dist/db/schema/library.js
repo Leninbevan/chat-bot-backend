@@ -14,7 +14,6 @@ exports.libraryTable = (0, pg_core_1.pgTable)("library", {
     category: (0, pg_core_1.text)("category").notNull(),
     visibility: (0, pg_core_1.text)("visbility").notNull(),
     instruction: (0, pg_core_1.text)("instruction"),
-    // gptId: text("gptId").notNull().references(() => modelGptTable.id),
     modelAI: (0, pg_core_1.text)("modelAI"),
     modelAIAccurarcy: (0, pg_core_1.doublePrecision)("modelAIAccurarcy"),
     youtbeChannel: (0, pg_core_1.text)("youtube"),

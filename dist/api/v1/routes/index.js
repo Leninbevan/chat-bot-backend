@@ -14,4 +14,6 @@ router.get("/getAgents", controllers_1.getAgentController);
 router.get("/getCharacters", controllers_1.getCharacterController);
 router.post("/updateLibrary", controllers_1.updateLibraryController);
 router.post("/newLibrary", controllers_1.addNewLibraryController);
+// router.post("/updateLibrary", upload,updateLibraryController);
+// router.post("/newLibrary", upload,addNewLibraryController);
 exports.default = router;
