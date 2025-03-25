@@ -1,5 +1,5 @@
 CREATE TABLE "account" (
-	"id" text PRIMARY KEY DEFAULT 'uuid_generate_v4()' NOT NULL,
+	"id" text PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
 	"accountId" text NOT NULL,
 	"providerId" text NOT NULL,
 	"userId" text NOT NULL,
@@ -14,8 +14,30 @@ CREATE TABLE "account" (
 	"updatedAt" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "library" (
+	"id" text PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
+	"userId" text NOT NULL,
+	"type" text NOT NULL,
+	"image" text NOT NULL,
+	"title" text NOT NULL,
+	"describtion" text NOT NULL,
+	"category" text NOT NULL,
+	"visbility" text NOT NULL,
+	"instruction" text,
+	"modelAI" text,
+	"modelAIAccurarcy" double precision,
+	"youtube" text,
+	"youtubeChannelLink" text,
+	"youtubeVideoLink" text,
+	"websiteURl" text,
+	"webpageLink" text,
+	"document" text,
+	"createdAt" timestamp DEFAULT now() NOT NULL,
+	"updatedAt" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "session" (
-	"id" text PRIMARY KEY DEFAULT 'uuid_generate_v4()' NOT NULL,
+	"id" text PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
 	"expiresAt" timestamp NOT NULL,
 	"token" text NOT NULL,
 	"createdAt" timestamp DEFAULT now() NOT NULL,
@@ -27,11 +49,11 @@ CREATE TABLE "session" (
 );
 --> statement-breakpoint
 CREATE TABLE "user" (
-	"id" text PRIMARY KEY DEFAULT 'uuid_generate_v4()' NOT NULL,
+	"id" text PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
 	"name" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"emailVerified" boolean NOT NULL,
-	"image" varchar(255),
+	"image" text NOT NULL,
 	"createdAt" timestamp DEFAULT now() NOT NULL,
 	"updatedAt" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "user_email_unique" UNIQUE("email")
@@ -47,4 +69,5 @@ CREATE TABLE "verification" (
 );
 --> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "library" ADD CONSTRAINT "library_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;

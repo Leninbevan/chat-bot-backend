@@ -1,15 +1,14 @@
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
-  dialect: 'postgresql', // 'mysql' | 'sqlite' | 'turso'
+  dialect: 'postgresql',
   schema: './src/db/schema',
   dbCredentials:{
-    user:'postgres',
-    password:'postgres',
-    host:'localhost',
-    port:5432,
-    database:'chatbot',
+    user:process.env.DATABASE_USER,
+    password:process.env.DATABASE_PASSWORD,
+    host:process.env.DATABASE_HOST||'localhost',
+    port:Number(process.env.DATABASE_PORT),
+    database:process.env.DATABASE_NAME||'chatbot',
     ssl:false
-  },
-  
+  }
 })

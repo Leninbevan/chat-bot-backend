@@ -1,8 +1,9 @@
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { usersTable } from "./users";
+import { sql } from "drizzle-orm";
 
 export const sessionsTable = pgTable("session", {
-    id: text("id").primaryKey().default("uuid_generate_v4()"),
+    id: text("id").primaryKey().default(sql`uuid_generate_v4()`),
     expiresAt: timestamp("expiresAt").notNull(),
     token: text("token").notNull().unique(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),

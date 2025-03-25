@@ -1,55 +1,19 @@
-import { Request, Response } from "express";
 
-import express from "express";
-import db from "./db";
-const cors = require("cors");
-
-// const { errorHandler } = require("./Controllers/e_CommerceController");
-// import {router as e_commerceRouter} from "./Routes/product_Routes";
-
-const path = require("path");
-
-const app = express();
+import app from "./app";
 
 require("dotenv").config();
 
-app.use(
-    cors({
-        origin: "*",
-        methods: ["GET", "POST", "PUT", "DELETE","PATCH","OPTIONS","HEAD"],
-        allowedHeaders: "*",
-        credentials: true,
-    })
-);
-
-app.use(express.json());
 
 // const result =  db.execute('select * from account');
 
 // result.execute().then((a: any) => {
 //     console.log(a);
 // })
-db.$client.connect();
-db.$client.on("error", (err: any) => { console.error.bind(console, "Connection Error: ") });
-db.$client.once("Open", () => { console.log("Database connected successfully") });
-// mongoose.connect(process.env.MONGODB_URI, { dbName: process.env.DB_NAME })
-//     .then(() => console.log("MongoDB connected"))
-//     .catch((err:unknown) => console.log(err));
 
-// const db = mongoose.connection;
 
-// db.on("error", console.error.bind(console, "connection error:"));
-// db.once("open", function () {
-//     console.log("Database connected successfully");
-// });
-
-app.get("/", (_: Request, res: Response) => {
-    res.send("Server is working");
-});
-
-// app.use("/", e_commerceRouter);
-
-// app.use(errorHandler);
+// db.$client.connect();
+// db.$client.on("error", (err: any) => { console.error.bind(console, "Connection Error: ") });
+// db.$client.once("Open", () => { console.log("Database connected successfully") });
 
 app.listen(process.env.PORT || 3322, () => {
     console.log("Server is running on port 3322");

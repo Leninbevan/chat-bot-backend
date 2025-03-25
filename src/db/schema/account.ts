@@ -1,8 +1,9 @@
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { usersTable } from "./users";
+import { sql } from "drizzle-orm";
 
 export const accountsTable = pgTable("account", {
-    id: text("id").primaryKey().default("uuid_generate_v4()"),
+    id: text("id").primaryKey().default(sql`uuid_generate_v4()`),
     accountId: text("accountId").notNull(),
     providerId: text("providerId").notNull(),
     userId: text("userId").notNull().references(() => usersTable.id),
